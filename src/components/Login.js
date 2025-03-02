@@ -1,26 +1,42 @@
 import React, { useState } from "react";
 import { auth } from "../firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { googleProvider } from "../firebase";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setError("");
+
     try {
       await signInWithEmailAndPassword(auth, email, password);
       navigate("/");
     } catch (error) {
-      console.error(error.message);
+      setError("Failed to log in. Please check your email and password.");
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    setError("");
+
+    try {
+      await signInWithPopup(auth, googleProvider);
+      navigate("/");
+    } catch (error) {
+      setError("Failed to log in with Google. Please try again.");
     }
   };
 
   return (
     <div>
       <h2>Login</h2>
+      {error && <p>{error}</p>}
       <form onSubmit={handleLogin}>
         <input
           type="email"
@@ -36,6 +52,8 @@ const Login = () => {
         />
         <button type="submit">Login</button>
       </form>
+      <p>OR</p>
+      <button onClick={handleGoogleLogin}>Sign in with Google</button>
     </div>
   );
 };
