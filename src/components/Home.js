@@ -1,7 +1,13 @@
 import React from "react";
+import Logout from "./Logout";
 
 const Home = () => {
-  return <h1>Welcome to Car Buy Sell</h1>;
+  return (
+    <div>
+      <h1>Welcome to Car Buy Sell</h1>
+      <Logout />
+    </div>
+  );
 };
 
 export default Home;
