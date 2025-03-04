@@ -7,22 +7,23 @@ const Home = () => {
   const [user] = useAuthState(auth);
 
   return (
-    <div>
-      <h1>Welcome to Car Buy Sell</h1>{user ? (
+    <div className="home">
+      <h1>Welcome to Car Buy Sell</h1>
+      {user ? (
         <div>
           <p>You are logged in as {user.email}</p>
           <Link to="/logout">
-            <button>Logout</button>
+            <button className="button">Logout</button>
           </Link>
         </div>
       ) : (
         <div>
           <p>Please log in or sign up to proceed.</p>
           <Link to="/signup">
-            <button>Sign Up</button>
+            <button className="button">Sign Up</button>
           </Link>
           <Link to="/login">
-            <button>Login</button>
+            <button className="button">Login</button>
           </Link>
         </div>
       )}

@@ -4,6 +4,7 @@ import Home from "./components/Home";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import Logout from "./components/Logout";
+import "./App.css";
 
 function App() {
   return (
