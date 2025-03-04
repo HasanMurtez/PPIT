@@ -1,9 +1,8 @@
 /* Home Page Styling */
 .home {
   text-align: center;
-  padding: 50px 20px;
-  background: linear-gradient(135deg, #6a11cb, #2575fc);
-  color: white;
+  padding: 100px 20px 50px; 
+  background-color: white;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -15,12 +14,14 @@
   font-size: 3rem;
   margin-bottom: 20px;
   font-weight: bold;
+  color: #1a73e8;
   animation: fadeIn 1s ease-in-out;
 }
 
 .home p {
   font-size: 1.2rem;
   margin-bottom: 30px;
+  color: #666;
   animation: fadeIn 1.5s ease-in-out;
 }
 
@@ -36,11 +37,11 @@
 }
 
 .home .button:hover {
-  background-color: #ff3b2f;
+  background-color: #e65a50;
   transform: scale(1.05);
 }
 
-/* fade in animation */
+/* Fade-in Animation */
 @keyframes fadeIn {
   from {
     opacity: 0;
