@@ -6,21 +6,25 @@ import { useNavigate } from "react-router-dom";
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
     e.preventDefault();
+    setError("");
+
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       navigate("/");
     } catch (error) {
-      console.error(error.message);
+      setError("Failed to sign up. Please try again.");
     }
   };
 
   return (
     <div>
       <h2>Sign Up</h2>
+      {error && <p>{error}</p>}
       <form onSubmit={handleSignUp}>
         <input
           type="email"
