@@ -228,3 +228,37 @@ nav ul li a.active {
   margin-bottom: 15px;
 }
 
+/* Logout Page Styling */
+.logout {
+  text-align: center;
+  padding: 100px 20px 50px; 
+  background-color: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.logout h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #1a73e8;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.logout button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 25px;
+  background-color: #ff6f61;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.logout button:hover {
+  background-color: #e65a50;
+  transform: scale(1.05);
+}
