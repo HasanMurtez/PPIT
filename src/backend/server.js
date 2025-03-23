@@ -45,6 +45,20 @@ app.get('/api/ads', async (req, res) => {
     res.json(ad);
   });
   
+  // create a new car ad
+  app.post('/api/ads', async (req, res) => {
+    const { make, model, year, price, mileage, description, image, postedBy } = req.body;
+  
+    const newAd = new CarAd({ make, model, year, price, mileage, description, image, postedBy });
+    await newAd.save();
+  
+    res.status(201).json({ message: "Car Ad Added!", ad: newAd });
+  });
+  
+  // Start the server
+  app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+  });
 
 
 
