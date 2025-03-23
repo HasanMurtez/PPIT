@@ -33,7 +33,12 @@ const carAdSchema = new mongoose.Schema({
 
 const CarAd = mongoose.model('CarAd', carAdSchema);
 
-
+//fetch all ads
+app.get('/api/ads', async (req, res) => {
+    const ads = await CarAd.find({});
+    res.status(200).json({ ads });
+  });
+  
 
 
 
