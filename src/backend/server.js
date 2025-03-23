@@ -39,7 +39,12 @@ app.get('/api/ads', async (req, res) => {
     res.status(200).json({ ads });
   });
   
-
+  //retrieve a specific car ad by ID
+  app.get('/api/ad/:id', async (req, res) => {
+    const ad = await CarAd.findById(req.params.id);
+    res.json(ad);
+  });
+  
 
 
 
