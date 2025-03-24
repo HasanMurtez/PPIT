@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb+srv://user1:user1@cluster0.vrhww.mongodb.net/');
+mongoose.connect('mongodb+srv://wagwanfoo:admin@project.gxyhl.mongodb.net/');
 
 const carAdSchema = new mongoose.Schema({
   make: { type: String, required: true },

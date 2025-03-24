@@ -10,6 +10,7 @@ const PostAd = () => {
     description: "",
     image: "",
   });
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,12 +19,20 @@ const PostAd = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setError("");
+
+    if (!formData.make || !formData.model || !formData.year || !formData.price) {
+      setError("Please fill in all required fields.");
+      return;
+    }
+
     console.log("Form Data:", formData);
   };
 
   return (
     <div>
       <h2>Post a Car Ad</h2>
+      {error && <p>{error}</p>}
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -44,7 +53,7 @@ const PostAd = () => {
         <input
           type="number"
           name="year"
-          placeholder="Year (e.g. 2020)"
+          placeholder="Year (e.g., 2020)"
           value={formData.year}
           onChange={handleChange}
           required
@@ -52,7 +61,7 @@ const PostAd = () => {
         <input
           type="number"
           name="price"
-          placeholder="Price (e.g. 15,000)"
+          placeholder="Price (e.g., 15,000)"
           value={formData.price}
           onChange={handleChange}
           required
@@ -60,7 +69,7 @@ const PostAd = () => {
         <input
           type="number"
           name="mileage"
-          placeholder="Mileage (e.g. 100,000)"
+          placeholder="Mileage (e.g., 100,000)"
           value={formData.mileage}
           onChange={handleChange}
         />
