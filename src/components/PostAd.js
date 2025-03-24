@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const PostAd = () => {
   const [formData, setFormData] = useState({
@@ -11,27 +13,36 @@ const PostAd = () => {
     image: "",
   });
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
+    // Basic validation
     if (!formData.make || !formData.model || !formData.year || !formData.price) {
       setError("Please fill in all required fields.");
       return;
     }
 
-    console.log("Form Data:", formData);
+    try {
+      const response = await axios.post("http://localhost:4000/api/ads", formData);
+      if (response.status === 201) {
+        navigate("/"); //redirects back to home page after posting an ad
+      }
+    } catch (error) {
+      setError("Failed to post ad. Please try again.");
+    }
   };
 
   return (
     <div>
-      <h2>Post a Car Ad</h2>
+       <h2>Post a Car Ad</h2>
       {error && <p>{error}</p>}
       <form onSubmit={handleSubmit}>
         <input
