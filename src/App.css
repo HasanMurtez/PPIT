@@ -263,3 +263,80 @@ nav ul li a.active {
   transform: scale(1.05);
 }
 
+.postad {
+  text-align: center;
+  padding: 100px 20px 50px;
+  background-color: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.postad .form {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  width: 100%;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.postad h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #1a73e8;
+}
+
+.postad input,
+.postad textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  background: #f5f5f5;
+  color: #333;
+  font-size: 1rem;
+}
+
+.postad textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.postad input::placeholder,
+.postad textarea::placeholder {
+  color: #999;
+}
+
+.postad button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 25px;
+  background-color: #ff6f61;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.postad button:hover {
+  background-color: #e65a50;
+  transform: scale(1.05);
+}
+
+.postad .error {
+  color: #ff6f61;
+  margin-bottom: 15px;
+}
+
+/* responsive adjustments */
+@media (max-width: 768px) {
+  .postad .form {
+    padding: 20px;
+  }
+}

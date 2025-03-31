@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase';
 
@@ -15,8 +13,8 @@ const PostAd = () => {
     mileage: '',
     description: '',
     image: '',
-    postedBy: user?.uid || ''
   });
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     setAd({ ...ad, [e.target.name]: e.target.value });
@@ -26,16 +24,15 @@ const PostAd = () => {
     e.preventDefault();
     try {
       if (!user) {
-        alert('You must be logged in to post an ad');
+        setError('You must be logged in to post an ad');
         return;
       }
       
-      const adData = { ...ad,
+      const response = await axios.post('http://localhost:4000/api/ads', {
+        ...ad,
         postedBy: user.uid
-      };
+      });
       
-      const response = await axios.post('http://localhost:4000/api/ads', adData);
-      console.log(response.data);
       alert('Car ad posted successfully!');
       setAd({
         make: '',
@@ -45,99 +42,78 @@ const PostAd = () => {
         mileage: '',
         description: '',
         image: '',
-        postedBy: user.uid
       });
     } catch (error) {
-      console.error('Error posting ad:', error);
-      alert('Failed to post ad. Please try again.');
+      setError('Failed to post ad. Please try again.');
     }
   };
 
   return (
-    <div className="container mt-4">
-      <h1>Post a Car Ad</h1>
-      <Form onSubmit={handleSubmit}>
-        <Form.Group className="mb-3" controlId="formMake">
-          <Form.Label>Make</Form.Label>
-          <Form.Control
+    <div className="postad">
+      <div className="form">
+        <h2>Post a Car Ad</h2>
+        {error && <p className="error">{error}</p>}
+        <form onSubmit={handleSubmit}>
+          <input
             type="text"
             name="make"
+            placeholder="Make (e.g. Toyota)"
             value={ad.make}
             onChange={handleChange}
-            placeholder="Enter car make (e.g. Toyota)"
             required
           />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formModel">
-          <Form.Label>Model</Form.Label>
-          <Form.Control
+          <input
             type="text"
             name="model"
+            placeholder="Model (e.g. Camry)"
             value={ad.model}
             onChange={handleChange}
-            placeholder="Enter car model (e.g. Camry)"
             required
           />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formYear">
-          <Form.Label>Year</Form.Label>
-          <Form.Control
+          <input
             type="number"
             name="year"
+            placeholder="Year (e.g. 2020)"
             value={ad.year}
             onChange={handleChange}
-            placeholder="Enter manufacturing year"
             required
           />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formPrice">
-          <Form.Label>Price ($)</Form.Label>
-          <Form.Control
+          <input
             type="number"
             name="price"
+            placeholder="Price in € (e.g. 15000)"
             value={ad.price}
             onChange={handleChange}
-            placeholder="Enter price"
             required
           />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formMileage">
-          <Form.Label>Mileage</Form.Label>
-          <Form.Control
+          <input
             type="number"
             name="mileage"
+            placeholder="Mileage in km (optional)"
             value={ad.mileage}
             onChange={handleChange}
-            placeholder="Enter mileage (optional)"
           />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formDescription">
-          <Form.Label>Description</Form.Label>
-          <Form.Control
-            as="textarea"
+          <textarea
             name="description"
+            placeholder="Description"
             value={ad.description}
             onChange={handleChange}
-            placeholder="Enter description (optional)"
-            rows={3}
           />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formImage">
-          <Form.Label>Image URL</Form.Label>
-          <Form.Control
+          <input
             type="text"
             name="image"
+            placeholder="Image URL"
             value={ad.image}
             onChange={handleChange}
-            placeholder="Enter image URL (optional)"
           />
-        </Form.Group>
-        <Button variant="primary" type="submit">
-          Post Ad
-        </Button>
-      </Form>
+          <button type="submit">Post Ad</button>
+        </form>
+      </div>
     </div>
   );
 };
 
 export default PostAd;
+
+
+
