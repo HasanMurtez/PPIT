@@ -30,7 +30,7 @@ const ViewAds = () => {
               <p><strong>Price:</strong> €{ad.price}</p>
               <p><strong>Mileage:</strong> {ad.mileage} km</p>
               <p>{ad.description}</p>
-              {ad.image && <img src={ad.image} alt={`${ad.make} ${ad.model}`} style={{ width: '250px', height: 'auto', objectFit: 'cover' }} />}
+              {ad.image && <img src={ad.image} alt={`${ad.make} ${ad.model}`} style={{ width: '350px', height: 'auto', objectFit: 'cover' }} />}
             </div>
           ))
         ) : (
