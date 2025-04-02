@@ -4,48 +4,78 @@ import { Link } from 'react-router-dom';
 
 const ViewAds = () => {
   const [ads, setAds] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:4000/api/ads')
-      .then((response) => {
+    const fetchAds = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/api/ads');
         setAds(response.data.ads);
-      })
-      .catch((error) => {
-        setError('Failed to load car ads.');
-        console.error(error);
-      });
+      } catch (error) {
+        setError('Failed to load car ads. Please try again later.');
+        console.error('Error fetching ads:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAds();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="view-ads-container">
+        <div className="loading">Loading available cars...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="view-ads-container">
+        <div className="error-message">{error}</div>
+      </div>
+    );
+  }
 
   return (
     <div className="view-ads-container">
-      <h2>{ads.length} {ads.length === 1 ? 'Car' : 'Cars'} Available</h2>
-      
-      {error && <p className="error-message">{error}</p>}
+      <div className="ads-header">
+        <h2>{ads.length} {ads.length === 1 ? 'Car' : 'Cars'} Available</h2>
+      </div>
 
       <div className="ads-grid">
         {ads.length > 0 ? (
           ads.map((ad) => (
             <div key={ad._id} className="ad-card">
               <div className="ad-image-container">
-                <img 
-                  src={ad.image || '/default-car.jpg'} 
-                  alt={`${ad.make} ${ad.model}`} 
+                <img
+                  src={ad.image || '/default-car.jpg'}
+                  alt={`${ad.make} ${ad.model}`}
                   className="ad-image"
+                  onError={(e) => {
+                    e.target.src = '/default-car.jpg';
+                  }}
                 />
               </div>
 
               <div className="ad-content">
                 <h3 className="ad-title">{ad.make} {ad.model}</h3>
+                
                 <div className="ad-specs">
                   <p><strong>Year:</strong> {ad.year}</p>
                   <p><strong>Mileage:</strong> {ad.mileage ? `${ad.mileage.toLocaleString()} km` : 'N/A'}</p>
-                  <p><strong>Location:</strong> {ad.location || 'Not specified'}</p>
                 </div>
-                
-                <div className="ad-price">
-                  €{ad.price.toLocaleString()}
+
+                <div className="ad-location">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                  </svg>
+                  <span>{ad.location || 'Location not specified'}</span>
                 </div>
+
+                <div className="ad-price">€{ad.price.toLocaleString()}</div>
 
                 <Link to={`/ad/${ad._id}`} className="details-button">
                   View Details
@@ -54,7 +84,12 @@ const ViewAds = () => {
             </div>
           ))
         ) : (
-          <p className="no-ads">No ads available at the moment.</p>
+          <div className="no-ads">
+            <p>No cars available at the moment.</p>
+            <Link to="/post-ad" className="details-button">
+              Post an Ad
+            </Link>
+          </div>
         )}
       </div>
     </div>

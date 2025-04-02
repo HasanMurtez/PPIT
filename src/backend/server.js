@@ -41,7 +41,7 @@ const carAdSchema = new mongoose.Schema({
 const CarAd = mongoose.model('CarAd', carAdSchema);
 
 app.post('/api/ads', async (req, res) => {
-  const { make, model, year, price, mileage, description, image, postedBy } = req.body;
+  const { make, model, year, price, mileage, location, description, image, postedBy } = req.body;
   try {
     const newAd = new CarAd({ make, model, year, price, mileage, location, description, image, postedBy });
     await newAd.save();
