@@ -6,7 +6,7 @@ const ViewAds = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    
+ 
     axios.get('http://localhost:4000/api/ads')
       .then((response) => {
         setAds(response.data.ads); 
@@ -30,7 +30,7 @@ const ViewAds = () => {
               <p><strong>Price:</strong> €{ad.price}</p>
               <p><strong>Mileage:</strong> {ad.mileage} km</p>
               <p>{ad.description}</p>
-              {ad.image && <img src={ad.image} alt={`${ad.make} ${ad.model}`} />}
+              {ad.image && <img src={ad.image} alt={`${ad.make} ${ad.model}`} style={{ width: '250px', height: 'auto', objectFit: 'cover' }} />}
             </div>
           ))
         ) : (
