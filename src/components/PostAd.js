@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase';
+import { useNavigate } from 'react-router-dom';
 
 const PostAd = () => {
   const [user] = useAuthState(auth);
@@ -13,8 +14,10 @@ const PostAd = () => {
     mileage: '',
     description: '',
     image: '',
+    location: '',
   });
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setAd({ ...ad, [e.target.name]: e.target.value });
@@ -28,12 +31,13 @@ const PostAd = () => {
         return;
       }
       
-      const response = await axios.post('http://localhost:4000/api/ads', {
+      await axios.post('http://localhost:4000/api/ads', {
         ...ad,
         postedBy: user.uid
       });
       
       alert('Car ad posted successfully!');
+      navigate('/');
       setAd({
         make: '',
         model: '',
@@ -42,9 +46,11 @@ const PostAd = () => {
         mileage: '',
         description: '',
         image: '',
+        location: '',
       });
     } catch (error) {
       setError('Failed to post ad. Please try again.');
+      console.error('Posting error:', error);
     }
   };
 
@@ -89,9 +95,17 @@ const PostAd = () => {
           <input
             type="number"
             name="mileage"
-            placeholder="Mileage in km (optional)"
+            placeholder="Mileage"
             value={ad.mileage}
             onChange={handleChange}
+          />
+          <input
+            type="text"
+            name="location"
+            placeholder="Location (e.g. Dublin)"
+            value={ad.location}
+            onChange={handleChange}
+            required
           />
           <textarea
             name="description"
@@ -114,6 +128,3 @@ const PostAd = () => {
 };
 
 export default PostAd;
-
-
-
