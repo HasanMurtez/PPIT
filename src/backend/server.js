@@ -31,6 +31,7 @@ const carAdSchema = new mongoose.Schema({
   year: { type: Number, required: true },
   price: { type: Number, required: true },
   mileage: { type: Number },
+  location: { type: String, required: true },
   description: { type: String },
   image: { type: String },
   postedBy: { type: String, required: true },
@@ -42,7 +43,7 @@ const CarAd = mongoose.model('CarAd', carAdSchema);
 app.post('/api/ads', async (req, res) => {
   const { make, model, year, price, mileage, description, image, postedBy } = req.body;
   try {
-    const newAd = new CarAd({ make, model, year, price, mileage, description, image, postedBy });
+    const newAd = new CarAd({ make, model, year, price, mileage, location, description, image, postedBy });
     await newAd.save();
     res.status(201).json({ message: 'Car ad added successfully', ad: newAd });
   } catch (error) {
