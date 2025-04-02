@@ -334,6 +334,7 @@ nav ul li a.active {
   margin-bottom: 15px;
 }
 
+
 /* responsive adjustments */
 @media (max-width: 768px) {
   .postad .form {
