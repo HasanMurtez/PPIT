@@ -41,7 +41,7 @@ const ViewAds = () => {
 
   return (
     <div className="view-ads">
-      <h2>Available Car Ads</h2>
+      <h2>Cars for sale</h2>
       {error && <p className="error">{error}</p>}
       <div className="ads-list">
         {ads.length > 0 ? (
