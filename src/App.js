@@ -6,6 +6,7 @@ import SignUp from "./components/SignUp";
 import Logout from "./components/Logout";
 import PostAd from "./components/PostAd"; 
 import ViewAds from './components/ViewAds';
+import AdDetails from "./components/AdDetails";
 import "./App.css";
 
 const Navbar = () => {
@@ -41,6 +42,7 @@ const Navbar = () => {
           <Link to="/view-ads" className={location.pathname === "/view-ads" ? "active" : ""}>
             View ads
           </Link>
+         
         </li>
       </ul>
     </nav>
@@ -58,6 +60,7 @@ function App() {
         <Route path="/logout" element={<Logout />} />
         <Route path="/post-ad" element={<PostAd />} />
         <Route path="/view-ads" element={<ViewAds />} />
+        <Route path="/ad/:id" element={<AdDetails />} />
       </Routes>
     </Router>
   );

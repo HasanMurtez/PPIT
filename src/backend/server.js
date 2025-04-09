@@ -51,7 +51,6 @@ app.post('/api/ads', async (req, res) => {
   }
 });
 
-
 app.get('/api/ads', async (req, res) => {
   try {
     const ads = await CarAd.find();
@@ -63,7 +62,8 @@ app.get('/api/ads', async (req, res) => {
 
 app.get('/api/ad/:id', async (req, res) => {
   try {
-    const ad = await CarAd.findById(req.params.id);
+    const adId = req.params.id;
+    const ad = await CarAd.findById(adId);
     if (!ad) {
       return res.status(404).json({ message: 'Car ad not found' });
     }
@@ -75,7 +75,8 @@ app.get('/api/ad/:id', async (req, res) => {
 
 app.delete('/api/ad/:id', async (req, res) => {
   try {
-    const ad = await CarAd.findByIdAndDelete(req.params.id);
+    const adId = req.params.id;
+    const ad = await CarAd.findByIdAndDelete(adId);
     if (!ad) {
       return res.status(404).json({ message: 'Car ad not found' });
     }
