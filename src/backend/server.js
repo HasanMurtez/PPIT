@@ -38,6 +38,17 @@ const carAdSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
+const messageSchema = new mongoose.Schema({
+  adId: { type: mongoose.Schema.Types.ObjectId, ref: 'CarAd', required: true },
+  sender: { type: String, required: true }, // Firebase UID
+  receiver: { type: String, required: true }, // Firebase UID
+  content: { type: String, required: true },
+  read: { type: Boolean, default: false },
+  createdAt: { type: Date, default: Date.now }
+});
+
+const Message = mongoose.model('Message', messageSchema);
+
 const CarAd = mongoose.model('CarAd', carAdSchema);
 
 app.post('/api/ads', async (req, res) => {
@@ -48,6 +59,18 @@ app.post('/api/ads', async (req, res) => {
     res.status(201).json({ message: 'Car ad added successfully', ad: newAd });
   } catch (error) {
     res.status(500).json({ message: 'Error adding car ad', error });
+  }
+});
+
+app.post('/api/messages', async (req, res) => {
+  const { adId, sender, receiver, content } = req.body;
+  
+  try {
+    const newMessage = new Message({ adId, sender, receiver, content });
+    await newMessage.save();
+    res.status(201).json({ message: 'Message sent successfully', data: newMessage });
+  } catch (error) {
+    res.status(500).json({ message: 'Error sending message', error });
   }
 });
 
@@ -70,6 +93,70 @@ app.get('/api/ad/:id', async (req, res) => {
     res.status(200).json(ad);
   } catch (error) {
     res.status(500).json({ message: 'Error retrieving car ad', error });
+  }
+});
+
+app.get('/api/messages/user/:userId', async (req, res) => {
+  const userId = req.params.userId;
+  
+  try {
+    const messages = await Message.find({
+      $or: [{ sender: userId }, { receiver: userId }]
+    }).populate('adId');
+    
+    const conversations = {};
+    messages.forEach(msg => {
+      const otherUser = msg.sender === userId ? msg.receiver : msg.sender;
+      const adId = msg.adId._id.toString();
+      
+      const key = `${otherUser}_${adId}`;
+      if (!conversations[key]) {
+        conversations[key] = {
+          adId: msg.adId._id,
+          adTitle: `${msg.adId.make} ${msg.adId.model}`,
+          otherUserId: otherUser,
+          messages: []
+        };
+      }
+      conversations[key].messages.push(msg);
+    });
+    
+    res.status(200).json(Object.values(conversations));
+  } catch (error) {
+    res.status(500).json({ message: 'Error retrieving messages', error });
+  }
+});
+
+app.get('/api/messages/conversation/:adId/:userId1/:userId2', async (req, res) => {
+  const { adId, userId1, userId2 } = req.params;
+  
+  try {
+    const messages = await Message.find({
+      adId,
+      $or: [
+        { sender: userId1, receiver: userId2 },
+        { sender: userId2, receiver: userId1 }
+      ]
+    }).sort({ createdAt: 1 });
+    
+    res.status(200).json(messages);
+  } catch (error) {
+    res.status(500).json({ message: 'Error retrieving conversation', error });
+  }
+});
+
+app.put('/api/messages/read', async (req, res) => {
+  const { messageIds } = req.body;
+  
+  try {
+    await Message.updateMany(
+      { _id: { $in: messageIds } },
+      { $set: { read: true } }
+    );
+    
+    res.status(200).json({ message: 'Messages marked as read' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating messages', error });
   }
 });
 

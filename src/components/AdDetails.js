@@ -141,5 +141,4 @@ const AdDetails = () => {
     </div>
   );
 };
-
 export default AdDetails;
