@@ -40,8 +40,8 @@ const carAdSchema = new mongoose.Schema({
 
 const messageSchema = new mongoose.Schema({
   adId: { type: mongoose.Schema.Types.ObjectId, ref: 'CarAd', required: true },
-  sender: { type: String, required: true }, // Firebase UID
-  receiver: { type: String, required: true }, // Firebase UID
+  sender: { type: String, required: true },
+  receiver: { type: String, required: true },
   content: { type: String, required: true },
   read: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now }
