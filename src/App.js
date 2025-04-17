@@ -8,6 +8,7 @@ import PostAd from "./components/PostAd";
 import ViewAds from './components/ViewAds';
 import AdDetails from "./components/AdDetails";
 import "./App.css";
+import About from "./components/About";
 
 const Navbar = () => {
   const location = useLocation();
@@ -42,7 +43,9 @@ const Navbar = () => {
           <Link to="/view-ads" className={location.pathname === "/view-ads" ? "active" : ""}>
             View ads
           </Link>
-         
+          <Link to="/about" className={location.pathname === "/about" ? "active" : ""}>
+           About
+          </Link>
         </li>
       </ul>
     </nav>
@@ -61,6 +64,7 @@ function App() {
         <Route path="/post-ad" element={<PostAd />} />
         <Route path="/view-ads" element={<ViewAds />} />
         <Route path="/ad/:id" element={<AdDetails />} />
+        <Route path="/about" element={<About />} />
       </Routes>
     </Router>
   );
