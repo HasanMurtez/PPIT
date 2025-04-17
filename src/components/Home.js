@@ -8,7 +8,7 @@ const Home = () => {
 
   return (
     <div className="home">
-      <h1>Welcome to Car Buy Sell</h1>
+      <h1>Welcome to AutoBazaar</h1>
       {user ? (
         <div>
           <p>You are logged in as {user.email}</p>
