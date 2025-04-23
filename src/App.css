@@ -263,6 +263,7 @@ nav ul li a.active {
   transform: scale(1.05);
 }
 
+/* Postad page */
 .postad {
   text-align: center;
   padding: 100px 20px 50px;
@@ -342,7 +343,7 @@ nav ul li a.active {
   }
 }
 
-/* View Ads Styling */
+/* View Ads page */
 .view-ads-container {
   max-width: 1200px;
   margin: 20px auto;
