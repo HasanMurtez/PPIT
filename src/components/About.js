@@ -58,8 +58,8 @@ const About = () => {
         </p>
       </div>
 
-      <div className="about-section about-team">
-        <h2>Meet Our Team</h2>
+      <div className="about-section about-Founder">
+        <h2>Meet Our CEO</h2>
         <div className="team-grid">
           <div className="team-member">
             <div className="member-photo placeholder-image"></div>

@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { auth } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { FaLock, FaSearch, FaMobileAlt, FaTags } from "react-icons/fa";
+import { FaLock, FaSearch , FaTags } from "react-icons/fa";
 
 const Home = () => {
   const [user] = useAuthState(auth);
