@@ -85,23 +85,53 @@ const AdDetails = () => {
           <h1>{ad.make} {ad.model}</h1>
           
           <div className="price-section">
-            <span className="price">€{ad.price.toLocaleString()}</span>
+            <span className="price">€{ad.price ? ad.price.toLocaleString() : '0'}</span>
           </div>
 
           <div className="details-section">
             <h2>Details</h2>
             <div className="details-grid">
               <div>
-                <strong>Year:</strong> {ad.year}
+                <strong>Year:</strong> {ad.year || 'Not specified'}
               </div>
               <div>
-                <strong>Mileage:</strong> {ad.mileage ? `${ad.mileage.toLocaleString()} km` : 'N/A'}
+                <strong>Mileage:</strong> {ad.mileage ? `${ad.mileage.toLocaleString()} km` : 'Not specified'}
               </div>
               <div>
-                <strong>Location:</strong> 
-                <span className="location">
-                  <FaMapMarkerAlt /> {ad.location}
-                </span>
+                <strong>Location:</strong> {ad.location || 'Not specified'}
+              </div>
+              <div>
+                <strong>Fuel Type:</strong> {ad.fuelType || 'Not specified'}
+              </div>
+              <div>
+                <strong>Transmission:</strong> {ad.transmission || 'Not specified'}
+              </div>
+              <div>
+                <strong>NCT Valid Until:</strong> {ad.nctExpiryDate ? new Date(ad.nctExpiryDate).toLocaleDateString('en-IE', { year: 'numeric', month: 'long' }) : 'Not available'}
+              </div>
+            </div>
+          </div>
+
+          <div className="specifications-section">
+            <h2>Specifications</h2>
+            <div className="specifications-grid">
+              <div>
+                <strong>Engine Size:</strong> {ad.engineSize || 'Not specified'}
+              </div>
+              <div>
+                <strong>Body Type:</strong> {ad.bodyType || 'Not specified'}
+              </div>
+              <div>
+                <strong>Color:</strong> {ad.color || 'Not specified'}
+              </div>
+              <div>
+                <strong>Doors:</strong> {ad.doors || 'Not specified'}
+              </div>
+              <div>
+                <strong>Previous Owners:</strong> {ad.previousOwners || 'Not specified'}
+              </div>
+              <div>
+                <strong>Road Tax:</strong> {ad.roadTax || 'Not specified'}
               </div>
             </div>
           </div>
@@ -141,4 +171,5 @@ const AdDetails = () => {
     </div>
   );
 };
+
 export default AdDetails;
