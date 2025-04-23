@@ -9,6 +9,7 @@ import ViewAds from './components/ViewAds';
 import AdDetails from "./components/AdDetails";
 import "./App.css";
 import About from "./components/About";
+import Messages from "./components/Messages";
 
 const Navbar = () => {
   const location = useLocation();
@@ -47,6 +48,11 @@ const Navbar = () => {
            About
           </Link>
         </li>
+        <li>
+           <Link to="/messages" className={location.pathname === "/messages" ? "active" : ""}>
+           Messages
+          </Link>
+          </li>
       </ul>
     </nav>
   );
@@ -65,6 +71,7 @@ function App() {
         <Route path="/view-ads" element={<ViewAds />} />
         <Route path="/ad/:id" element={<AdDetails />} />
         <Route path="/about" element={<About />} />
+        <Route path="/messages" element={<Messages />} />
       </Routes>
     </Router>
   );

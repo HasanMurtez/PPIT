@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase';
-import { FaMapMarkerAlt, FaArrowLeft, FaPhone, FaEnvelope } from 'react-icons/fa';
+import {  FaArrowLeft, FaPhone, FaEnvelope } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 const AdDetails = () => {
@@ -35,7 +35,7 @@ const AdDetails = () => {
     
     try {
       await axios.delete(`http://localhost:4000/api/ad/${id}`);
-      navigate('/ads');
+      navigate('/view-ads');
     } catch (error) {
       setError('Failed to delete ad. Please try again.');
       console.error('Error deleting ad:', error);
