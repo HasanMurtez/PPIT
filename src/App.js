@@ -49,9 +49,9 @@ const Navbar = () => {
           </Link>
         </li>
         <li>
-           <Link to="/messages" className={location.pathname === "/messages" ? "active" : ""}>
-           Messages
-          </Link>
+        <Link to="/messages" className={location.pathname === "/messages" ? "active" : ""}>
+          Messages
+         </Link>
           </li>
       </ul>
     </nav>
