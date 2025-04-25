@@ -5,6 +5,7 @@ const port = 4000;
 const cors = require('cors');
 app.use(cors());
 
+//allows the frontend and backend to communicate
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
@@ -12,10 +13,12 @@ app.use(function (req, res, next) {
   next();
 });
 
+// body parser to parse incoming request bodies(json)
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+//MongoDB connection using mongoose
 const mongoose = require('mongoose');
 
 mongoose.connect('mongodb+srv://admin:user@car.bjz0r.mongodb.net/', {
@@ -25,6 +28,7 @@ mongoose.connect('mongodb+srv://admin:user@car.bjz0r.mongodb.net/', {
 .then(() => console.log('Connected to MongoDB'))
 .catch(err => console.error('MongoDB connection error:', err));
 
+//Car Ad Schema
 const carAdSchema = new mongoose.Schema({
   make: { type: String, required: true },
   model: { type: String, required: true },
@@ -36,17 +40,9 @@ const carAdSchema = new mongoose.Schema({
   image: { type: String },
   postedBy: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
-  fuelType: { type: String },
-  transmission: { type: String },
-  nctExpiryDate: { type: Date },
-  engineSize: { type: String },
-  bodyType: { type: String },
-  color: { type: String },
-  doors: { type: String },
-  previousOwners: { type: String },
-  roadTax: { type: String }
 });
 
+// message Schema for handling messages between users
 const messageSchema = new mongoose.Schema({
   adId: { type: mongoose.Schema.Types.ObjectId, ref: 'CarAd', required: true },
   sender: { type: String, required: true },
@@ -56,28 +52,28 @@ const messageSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
+// mongoose models for messages and car ads
 const Message = mongoose.model('Message', messageSchema);
-
 const CarAd = mongoose.model('CarAd', carAdSchema);
 
+// post route for adding a new car ad
 app.post('/api/ads', async (req, res) => {
   const { 
-    make, model, year, price, mileage, location, description, image, postedBy,
-    fuelType, transmission, nctExpiryDate, engineSize, bodyType, color, doors, previousOwners, roadTax 
+    make, model, year, price, mileage, location, description, image, postedBy
   } = req.body;
   
   try {
     const newAd = new CarAd({ 
-      make, model, year, price, mileage, location, description, image, postedBy,
-      fuelType, transmission, nctExpiryDate, engineSize, bodyType, color, doors, previousOwners, roadTax 
+      make, model, year, price, mileage, location, description, image, postedBy
     });
-    await newAd.save();
+    await newAd.save(); //save the ad to the db
     res.status(201).json({ message: 'Car ad added successfully', ad: newAd });
   } catch (error) {
     res.status(500).json({ message: 'Error adding car ad', error });
   }
 });
 
+// post route for sending messages between users
 app.post('/api/messages', async (req, res) => {
   const { adId, sender, receiver, content } = req.body;
   
@@ -90,6 +86,7 @@ app.post('/api/messages', async (req, res) => {
   }
 });
 
+// get route to fetch all car ads
 app.get('/api/ads', async (req, res) => {
   try {
     const ads = await CarAd.find();
@@ -99,6 +96,7 @@ app.get('/api/ads', async (req, res) => {
   }
 });
 
+// get route to fetch details of a specific car ad by id
 app.get('/api/ad/:id', async (req, res) => {
   try {
     const adId = req.params.id;
@@ -112,26 +110,30 @@ app.get('/api/ad/:id', async (req, res) => {
   }
 });
 
+// get route to fetch messages
 app.get('/api/messages/user/:userId', async (req, res) => {
   const userId = req.params.userId;
   
   try {
     const messages = await Message.find({
-      $or: [{ sender: userId }, { receiver: userId }]
+      $or: [{ sender: userId }, { receiver: userId }] // $or operator to match either sender or receiver
     }).populate('adId');
     
     const conversations = {};
+
+    //loop through all messages and group them into conversations
     messages.forEach(msg => {
       const otherUser = msg.sender === userId ? msg.receiver : msg.sender;
       const adId = msg.adId._id.toString();
       
+      // make a unique key for each conversation using otherUser and adId
       const key = `${otherUser}_${adId}`;
       if (!conversations[key]) {
         conversations[key] = {
           adId: msg.adId._id,
           adTitle: `${msg.adId.make} ${msg.adId.model}`,
           otherUserId: otherUser,
-          messages: []
+          messages: [] // array to store all messages for this conversation
         };
       }
       conversations[key].messages.push(msg);
@@ -143,17 +145,18 @@ app.get('/api/messages/user/:userId', async (req, res) => {
   }
 });
 
+//fetches specific conversation between 2 users
 app.get('/api/messages/conversation/:adId/:userId1/:userId2', async (req, res) => {
   const { adId, userId1, userId2 } = req.params;
   
   try {
     const messages = await Message.find({
-      adId,
+      adId, //match messages for the specific car ad
       $or: [
         { sender: userId1, receiver: userId2 },
         { sender: userId2, receiver: userId1 }
       ]
-    }).sort({ createdAt: 1 });
+    }).sort({ createdAt: 1 });  // sort messages by the creation date
     
     res.status(200).json(messages);
   } catch (error) {
@@ -161,6 +164,7 @@ app.get('/api/messages/conversation/:adId/:userId1/:userId2', async (req, res) =
   }
 });
 
+//mark messages as read
 app.put('/api/messages/read', async (req, res) => {
   const { messageIds } = req.body;
   
@@ -176,6 +180,7 @@ app.put('/api/messages/read', async (req, res) => {
   }
 });
 
+// delete route to delete a car ad by id
 app.delete('/api/ad/:id', async (req, res) => {
   try {
     const adId = req.params.id;

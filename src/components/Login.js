@@ -5,11 +5,13 @@ import { googleProvider } from "../firebase";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+   //usestate hooks to manage form inputs and error messages
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+    //handle form submission for login 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");

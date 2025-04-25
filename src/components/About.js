@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaFacebook, FaInstagram, FaTwitter, FaLinkedin } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const About = () => {
   return (
@@ -32,11 +33,6 @@ const About = () => {
             <p>We review all listings to ensure quality and accuracy for a trustworthy experience.</p>
           </div>
           <div className="feature">
-            <div className="feature-icon">📱</div>
-            <h3>Mobile Friendly</h3>
-            <p>Browse and communicate on any device with our responsive design.</p>
-          </div>
-          <div className="feature">
             <div className="feature-icon">💰</div>
             <h3>No Hidden Fees</h3>
             <p>Transparent pricing with no surprises when buying or selling.</p>
@@ -59,22 +55,18 @@ const About = () => {
       </div>
 
       <div className="about-section about-Founder">
-        <h2>Meet Our CEO</h2>
-        <div className="team-grid">
-          <div className="team-member">
-            <div className="member-photo placeholder-image"></div>
-            <h3>Hasan Murtaza</h3>
-            <p>Founder & CEO</p>
-          </div>
-          <div className="team-member">
-            <div className="member-photo placeholder-image"></div>
-            <h3>Moh Elmahi</h3>
-            <p>Chief Technology Officer</p>
-          </div>
-          <div className="team-member">
-            <div className="member-photo placeholder-image"></div>
-            <h3>Johnny Mununkum</h3>
-            <p>Head of User Experience</p>
+      <h2>Meet Our CEO</h2>
+      <div className="ceo-grid">
+      <div className="ceo-member">
+      <div className="ceo-photo">
+        <img
+          src="/Hasan_Murtaza.jpg" 
+          alt="Hasan Murtaza"
+          className="ceo-image"
+        />
+      </div>
+      <h3>Hasan Murtaza</h3>
+      <p>Founder & CEO</p>
           </div>
         </div>
       </div>
@@ -98,8 +90,8 @@ const About = () => {
           Join thousands of satisfied users who have found their perfect car match on AutoBazaar.
         </p>
         <div className="cta-buttons">
-          <div className="cta-button browse">Browse Cars</div>
-          <div className="cta-button sell">Sell Your Car</div>
+          <Link to="/view-ads" className="cta-button browse">Browse Cars</Link>
+          <Link to="/post-ad" className="cta-button sell">Sell Your Car</Link>
         </div>
       </div>
     </div>

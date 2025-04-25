@@ -10,6 +10,7 @@ const MessageModal = ({ adId, adTitle, receiverId, isOpen, onClose }) => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
+    //handle form submission when sending a message
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -28,24 +29,27 @@ const MessageModal = ({ adId, adTitle, receiverId, isOpen, onClose }) => {
     setSending(true);
     
     try {
+
+      //make post request to the backend to send the message
       await axios.post('http://localhost:4000/api/messages', {
         adId,
-        sender: user.uid,
+        sender: user.uid, //sender is the currently logged in user
         receiver: receiverId,
         content: message
       });
       
-      setSuccess(true);
+      setSuccess(true); //mark the message as successfully sent
       setMessage('');
       setTimeout(() => {
-        onClose();
+        onClose(); //close the modal after a 2 sec delay
         setSuccess(false);
       }, 2000);
+
     } catch (error) {
       setError('Failed to send message. Please try again.');
       console.error('Error sending message:', error);
     } finally {
-      setSending(false);
+      setSending(false); //reset sending state
     }
   };
   

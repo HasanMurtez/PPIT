@@ -23,13 +23,14 @@ const Messages = () => {
     }
   }, [user, navigate, loading]);
 
+  //fetch conversations when the user is logged in
   useEffect(() => {
     const fetchConversations = async () => {
       if (!user) return;
       
       try {
         const response = await axios.get(`http://localhost:4000/api/messages/user/${user.uid}`);
-        setConversations(response.data);
+        setConversations(response.data);  //store the fetched conversations in state
       } catch (error) {
         setError('Failed to load conversations. Please try again.');
         console.error('Error fetching conversations:', error);
@@ -38,13 +39,15 @@ const Messages = () => {
       }
     };
 
-    fetchConversations();
+    fetchConversations(); //call function to fetch conversations
   }, [user]);
 
+  // function to open a selected conversation and mark unread messages as read
   const openConversation = async (conversation) => {
     setActiveConversation(conversation);
     
     try {
+      //fetch the messages in the selected conversation
       const response = await axios.get(
         `http://localhost:4000/api/messages/conversation/${conversation.adId}/${user.uid}/${conversation.otherUserId}`
       );
@@ -63,6 +66,7 @@ const Messages = () => {
     }
   };
 
+    //function to handle sending a new message
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!newMessage.trim() || !activeConversation) return;
@@ -70,6 +74,7 @@ const Messages = () => {
     setSending(true);
     
     try {
+      //to send the new message
       const response = await axios.post('http://localhost:4000/api/messages', {
         adId: activeConversation.adId,
         sender: user.uid,
@@ -77,7 +82,7 @@ const Messages = () => {
         content: newMessage
       });
       
-      setMessages([...messages, response.data.data]);
+      setMessages([...messages, response.data.data]); //add the new message to the messages state
       setNewMessage('');
     } catch (error) {
       console.error('Error sending message:', error);
@@ -86,6 +91,7 @@ const Messages = () => {
     }
   };
 
+   //if the user is not logged in display a message and telling them to log in
   if (!user) {
     return (
       <div className="messages-container">
@@ -118,6 +124,7 @@ const Messages = () => {
               <Link to="/ads" className="browse-button">Browse Cars</Link>
             </div>
           ) : (
+            // map through conversations and render them as clickable items
             conversations.map((conv, index) => {
                 
               // get last message
@@ -172,6 +179,7 @@ const Messages = () => {
                 </h3>
               </div>
               
+              {/*display all messages in the conversation */}
               <div className="messages-list">
                 {messages.map(msg => (
                   <div 
@@ -186,6 +194,7 @@ const Messages = () => {
                 ))}
               </div>
               
+              {/*form for sending a new message */}
               <form className="message-input-form" onSubmit={handleSendMessage}>
                 <textarea 
                   value={newMessage}

@@ -784,42 +784,40 @@ nav ul li a.active {
   color: #333;
 }
 
-/* Team Section */
-.team-grid {
+/* CEO Section */
+.ceo-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 40px;
   margin-top: 30px;
 }
 
-.team-member {
+.ceo-member {
   text-align: center;
 }
 
-.member-photo {
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  margin: 0 auto 16px;
+.ceo-photo {
+  width: 100px;            /* Set the photo container width to 100px */
+  height: 100px;           /* Set the photo container height to 100px */
+  margin: 0 auto 16px;     /* Center the image */
   background-color: #e2e8f0;
+  border-radius: 50%;      /* Make the container circular */
 }
 
-.placeholder-image {
-  background-color: #e2e8f0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #a0aec0;
-  font-size: 40px;
+.ceo-photo img {
+  width: 100%;             /* Make the image fill the container */
+  height: 100%;            /* Maintain the aspect ratio */
+  object-fit: cover;       /* Ensure the image covers the entire area without distortion */
+  border-radius: 50%;      /* Ensure the image is circular */
 }
 
-.team-member h3 {
+.ceo-member h3 {
   font-size: 1.3rem;
   margin-bottom: 8px;
   color: #333;
 }
 
-.team-member p {
+.ceo-member p {
   color: #666;
   font-size: 1rem;
 }
@@ -898,7 +896,7 @@ nav ul li a.active {
 /* Responsive Adjustments */
 @media (max-width: 768px) {
   .features-grid,
-  .team-grid {
+  .ceo-grid {
     grid-template-columns: 1fr;
   }
   

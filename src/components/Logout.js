@@ -8,7 +8,7 @@ const Logout = () => {
 
   const handleLogout = async () => {
     try {
-      await signOut(auth);
+      await signOut(auth);  //sign out the user using firebase signout method
       navigate("/");
     } catch (error) {
       console.error(error.message);

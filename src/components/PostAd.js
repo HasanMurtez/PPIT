@@ -5,7 +5,10 @@ import { auth } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 
 const PostAd = () => {
+  //use the useauthstate hook to get the current loggedin user from firebase
   const [user] = useAuthState(auth);
+  
+  //state to manage the ad form fields
   const [ad, setAd] = useState({
     make: '',
     model: '',
@@ -19,10 +22,12 @@ const PostAd = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+   //handle changes in form fields
   const handleChange = (e) => {
-    setAd({ ...ad, [e.target.name]: e.target.value });
+    setAd({ ...ad, [e.target.name]: e.target.value }); //update the field 
   };
 
+   //handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -30,10 +35,11 @@ const PostAd = () => {
         setError('You must be logged in to post an ad');
         return;
       }
-      
+        //make a post request to the backend to save the ad
       await axios.post('http://localhost:4000/api/ads', {
-        ...ad,
-        postedBy: user.uid
+
+        ...ad, //spread the ad data to send all ad details
+        postedBy: user.uid // add the user id of the user posting the ad
       });
       
       alert('Car ad posted successfully!');
@@ -47,7 +53,8 @@ const PostAd = () => {
         description: '',
         image: '',
         location: '',
-      });
+      }); //reset the form after successful submission
+
     } catch (error) {
       setError('Failed to post ad. Please try again.');
       console.error('Posting error:', error);

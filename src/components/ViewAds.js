@@ -4,13 +4,16 @@ import { Link } from 'react-router-dom';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 
 const ViewAds = () => {
+  //state to hold the list of ads
   const [ads, setAds] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  // useEffect to fetch car ads data
   useEffect(() => {
     const fetchAds = async () => {
       try {
+         //get request to fetch all car ads from the backend api
         const response = await axios.get('http://localhost:4000/api/ads');
         setAds(response.data.ads);
       } catch (error) {
@@ -21,7 +24,7 @@ const ViewAds = () => {
       }
     };
 
-    fetchAds();
+    fetchAds(); //call the function to fetch ads
   }, []);
 
   if (loading) {

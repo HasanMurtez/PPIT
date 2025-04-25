@@ -3,20 +3,22 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase';
-import {  FaArrowLeft, FaPhone, FaEnvelope } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { FaMapMarkerAlt, FaArrowLeft , FaEnvelope } from 'react-icons/fa';
+import MessageModal from './MessageModal';
 
 const AdDetails = () => {
-  const { id } = useParams();
+  const { id } = useParams(); // access the ad id from the URL
   const navigate = useNavigate();
   const [user] = useAuthState(auth);
   const [ad, setAd] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [isMessageModalOpen, setIsMessageModalOpen] = useState(false); //modal state for sending messages
 
   useEffect(() => {
     const fetchAd = async () => {
       try {
+          // mae an api request to fetch ad details
         const response = await axios.get(`http://localhost:4000/api/ad/${id}`);
         setAd(response.data);
       } catch (error) {
@@ -30,16 +32,37 @@ const AdDetails = () => {
     fetchAd();
   }, [id]);
 
+//function to handle ad deletion  
   const handleDelete = async () => {
     if (!window.confirm('Are you sure you want to delete this ad?')) return;
     
     try {
       await axios.delete(`http://localhost:4000/api/ad/${id}`);
-      navigate('/view-ads');
+      navigate('/ads');
     } catch (error) {
       setError('Failed to delete ad. Please try again.');
       console.error('Error deleting ad:', error);
     }
+  };
+
+   // function to handle opening message modal
+  const handleMessageClick = () => {
+
+    // if the user is not logged in navigate them to the login page
+    if (!user) {
+      if (window.confirm('You need to be logged in to send messages. Go to login page?')) {
+        navigate('/login', { state: { returnUrl: `/ad/${id}` } });
+      }
+      return;
+    }
+    
+    // dont allow messaging your own ad
+    if (user.uid === ad.postedBy) {
+      alert("You can't message your own ad");
+      return;
+    }
+    
+    setIsMessageModalOpen(true); // open message modal
   };
 
   if (loading) {
@@ -85,53 +108,23 @@ const AdDetails = () => {
           <h1>{ad.make} {ad.model}</h1>
           
           <div className="price-section">
-            <span className="price">€{ad.price ? ad.price.toLocaleString() : '0'}</span>
+            <span className="price">€{ad.price.toLocaleString()}</span>
           </div>
 
           <div className="details-section">
             <h2>Details</h2>
             <div className="details-grid">
               <div>
-                <strong>Year:</strong> {ad.year || 'Not specified'}
+                <strong>Year:</strong> {ad.year}
               </div>
               <div>
-                <strong>Mileage:</strong> {ad.mileage ? `${ad.mileage.toLocaleString()} km` : 'Not specified'}
+                <strong>Mileage:</strong> {ad.mileage ? `${ad.mileage.toLocaleString()} km` : 'N/A'}
               </div>
               <div>
-                <strong>Location:</strong> {ad.location || 'Not specified'}
-              </div>
-              <div>
-                <strong>Fuel Type:</strong> {ad.fuelType || 'Not specified'}
-              </div>
-              <div>
-                <strong>Transmission:</strong> {ad.transmission || 'Not specified'}
-              </div>
-              <div>
-                <strong>NCT Valid Until:</strong> {ad.nctExpiryDate ? new Date(ad.nctExpiryDate).toLocaleDateString('en-IE', { year: 'numeric', month: 'long' }) : 'Not available'}
-              </div>
-            </div>
-          </div>
-
-          <div className="specifications-section">
-            <h2>Specifications</h2>
-            <div className="specifications-grid">
-              <div>
-                <strong>Engine Size:</strong> {ad.engineSize || 'Not specified'}
-              </div>
-              <div>
-                <strong>Body Type:</strong> {ad.bodyType || 'Not specified'}
-              </div>
-              <div>
-                <strong>Color:</strong> {ad.color || 'Not specified'}
-              </div>
-              <div>
-                <strong>Doors:</strong> {ad.doors || 'Not specified'}
-              </div>
-              <div>
-                <strong>Previous Owners:</strong> {ad.previousOwners || 'Not specified'}
-              </div>
-              <div>
-                <strong>Road Tax:</strong> {ad.roadTax || 'Not specified'}
+                <strong>Location:</strong> 
+                <span className="location">
+                  <FaMapMarkerAlt /> {ad.location}
+                </span>
               </div>
             </div>
           </div>
@@ -144,10 +137,10 @@ const AdDetails = () => {
           <div className="seller-section">
             <h2>Seller Information</h2>
             <div className="seller-actions">
-              <button className="contact-button">
-                <FaPhone /> Contact Seller
-              </button>
-              <button className="message-button">
+              <button 
+                className="message-button"
+                onClick={handleMessageClick}
+              >
                 <FaEnvelope /> Send Message
               </button>
             </div>
@@ -161,13 +154,18 @@ const AdDetails = () => {
               >
                 Delete This Ad
               </button>
-              <Link to={`/edit-ad/${ad._id}`} className="edit-button">
-                Edit This Ad
-              </Link>
             </div>
           )}
         </div>
       </div>
+
+      <MessageModal
+        isOpen={isMessageModalOpen}
+        onClose={() => setIsMessageModalOpen(false)}
+        adId={ad._id}
+        adTitle={`${ad.make} ${ad.model}`}
+        receiverId={ad.postedBy}
+      />
     </div>
   );
 };
